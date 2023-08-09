@@ -1,46 +1,30 @@
-%-------------------------------------------------------------------------------
-%Autor: Thiago Rocha de Melo
-%Departamento de Engenharia Eletrica - Universidade Federal de Sergipe
-%
-%-------------------------------------------------------------------------------
-
 % 1.Estimacao da PDF usando Janelas Parzen com Janela Gaussiana
 % 2. Classificador Bayesiano utilizando a PDF estimada.
 clear
 close all
 clc
-dados = load ('glicose.txt');
+dados = load ('glicose.txt'); 
 % Pessoas sem diabetes pertencem a Classe 0 e com diabetes a classe 1
 classe0 = dados(find(dados(:,2) == 0),1);
 classe1 = dados(find(dados(:,2) == 1),1);
 n = length(classe0);
 h = round(sqrt(n));
 dim = size(classe0,2);
-janela = zeros(n,1);
-pdf = janela;
-u = janela;
-gaussiana = janela;
-x = [40:0.01:200];
+x = [35:0.01:300];
+tic
 for i = 1:length(x)
-    for j = 1:length(classe0)
-        u(j) = (x(i)-classe0(j))/h;
-        gaussiana(j) = (1/sqrt(2*pi))*exp((-u(j)^2)/2);
-        end
-        pdf_classe0(i) = (1/n)*sum((1/h^dim)*gaussiana);
+    u = (x(i)-classe0)/h;
+    gaussiana = (1/sqrt(2*pi))*exp((-u.^2)./2);
+    pdf_classe0(i) = (1/n)*sum((1/h^dim)*gaussiana);
 end
 n = length(classe1);
 h = round(sqrt(n));
-janela = zeros(n,1);
-pdf = janela;
-u = janela;
-gaussiana = janela;
 for i = 1:length(x)
-    for j = 1:length(classe1)
-        u(j) = (x(i)-classe1(j))/h;
-        gaussiana(j) = (1/sqrt(2*pi))*exp((-u(j)^2)/2);
-        end
-        pdf_classe1(i) = (1/n)*sum((1/h^dim)*gaussiana);
+    u = (x(i)-classe1)/h;
+    gaussiana = (1/sqrt(2*pi))*exp((-u.^2)./2);
+    pdf_classe1(i) = (1/n)*sum((1/h^dim)*gaussiana);
 end
+toc
 plot(x,pdf_classe0)
 hold on
 plot(x,pdf_classe1)
@@ -76,13 +60,13 @@ end
 disp(['Tx_Acerto: ', num2str(100*acertos/(acertos+erros)), '%'])
 %-------------------------------------------------------------------------
 %Classificador para uma entrada dada pelo usuário
-entrada = input('Digite a glicose do paciente: ')
-idc = find(x==entrada);
-aux0 = pdf_classe0(idc)*p_classe0;
-aux1 = pdf_classe1(idc)*p_classe1;
-if aux0 > aux1
-    classe_estimada2 = 0
-else
-    classe_estimada2 = 1
-end
+% entrada = input('Digite a glicose do paciente: ')
+% idc = find(x==entrada);
+% aux0 = pdf_classe0(idc)*p_classe0;
+% aux1 = pdf_classe1(idc)*p_classe1;
+% if aux0 > aux1
+%     classe_estimada2 = 0
+% else
+%     classe_estimada2 = 1
+% end
 
