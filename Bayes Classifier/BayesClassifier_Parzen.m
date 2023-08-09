@@ -11,7 +11,6 @@ n = length(classe0);
 h = round(sqrt(n));
 dim = size(classe0,2);
 x = [35:0.01:300];
-tic
 for i = 1:length(x)
     u = (x(i)-classe0)/h;
     gaussiana = (1/sqrt(2*pi))*exp((-u.^2)./2);
@@ -24,7 +23,6 @@ for i = 1:length(x)
     gaussiana = (1/sqrt(2*pi))*exp((-u.^2)./2);
     pdf_classe1(i) = (1/n)*sum((1/h^dim)*gaussiana);
 end
-toc
 plot(x,pdf_classe0)
 hold on
 plot(x,pdf_classe1)
